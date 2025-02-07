@@ -1,0 +1,21 @@
+import feedparser
+
+def nayta_uutisia_html(rss_url):
+    # Hae RSS-syöte
+    uutiset = feedparser.parse(rss_url)
+
+    # Luo HTML-sisältö
+    html_sisalto = "<html><body><h1>Uusimmat uutiset</h1><ul>"
+
+    for uutinen in uutiset.entries:
+        html_sisalto += f"<li><a href='{uutinen.link}'>{uutinen.title}</a></li>"
+
+    html_sisalto += "</ul></body></html>"
+
+    # Tallenna HTML-tiedostona
+    with open("uutiset.html", "w", encoding="utf-8") as file:
+        file.write(html_sisalto)
+
+# Esimerkki RSS-syötteen URL-osoitteesta
+rss_url = "https://www.hs.fi/rss/tuoreimmat.xml"
+nayta_uutisia_html(rss_url)

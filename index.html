@@ -59,12 +59,12 @@
 
             data.items.forEach(item => {
                 const uutinen = document.createElement('li');
-                uutinen.innerHTML = `<a href="${item.link}">${item.title}</a>`;
+                uutinen.innerHTML = `<a href="${item.link}" target="_blank">${item.title}</a>`;
                 uutisetLista.appendChild(uutinen);
             });
         }
 
-        haeUutiset();
+        haeUutiset().catch(error => console.error("Uutisten hakeminen epäonnistui:", error));
     </script>
 </body>
 </html>

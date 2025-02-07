@@ -1,24 +1,70 @@
-import feedparser
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uusimmat Uutiset</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://raw.githubusercontent.com/Evis-kamua/hs/refs/heads/main/hasa-bg.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            background: rgba(255, 255, 255, 0.8);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .otsikko {
+            flex: 2;
+            margin-right: 20px;
+        }
+        .uutiskuva {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+        .qr-koodi {
+            flex: 1;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="otsikko">
+            <h1>Uusimmat Uutiset</h1>
+            <ul id="uutiset-lista"></ul>
+        </div>
+        <div class="uutiskuva">
+            <img src="https://via.placeholder.com/300x200" alt="Uutiskuva">
+        </div>
+        <div class="qr-koodi">
+            <img src="https://via.placeholder.com/150" alt="QR-koodi">
+        </div>
+    </div>
 
-def nayta_uutisia_html(rss_url):
-    # Hae RSS-syöte
-    uutiset = feedparser.parse(rss_url)
+    <script>
+        async function haeUutiset() {
+            const rss_url = "https://www.hameensanomat.fi/feed/rss/";
+            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rss_url}`);
+            const data = await response.json();
+            const uutisetLista = document.getElementById('uutiset-lista');
 
-    # Luo HTML-sisältö
-    html_sisalto = "<html><body><h1>Uusimmat uutiset</h1><ul>"
+            data.items.forEach(item => {
+                const uutinen = document.createElement('li');
+                uutinen.innerHTML = `<a href="${item.link}">${item.title}</a>`;
+                uutisetLista.appendChild(uutinen);
+            });
+        }
 
-    if not uutiset.entries:
-        html_sisalto += "<li>Ei uutisia saatavilla.</li>"
-
-    for uutinen in uutiset.entries:
-        html_sisalto += f"<li><a href='{uutinen.link}'>{uutinen.title}</a></li>"
-
-    html_sisalto += "</ul></body></html>"
-
-    # Tallenna HTML-tiedostona
-    with open("uutiset.html", "w", encoding="utf-8") as file:
-        file.write(html_sisalto)
-
-# Esimerkki RSS-syötteen URL-osoitteesta
-rss_url = "https://www.hameensanomat.fi/feed/rss/"
-nayta_uutisia_html(rss_url)
+        haeUutiset();
+    </script>
+</body>
+</html>

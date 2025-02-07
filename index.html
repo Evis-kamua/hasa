@@ -7,6 +7,9 @@ def nayta_uutisia_html(rss_url):
     # Luo HTML-sisältö
     html_sisalto = "<html><body><h1>Uusimmat uutiset</h1><ul>"
 
+    if not uutiset.entries:
+        html_sisalto += "<li>Ei uutisia saatavilla.</li>"
+
     for uutinen in uutiset.entries:
         html_sisalto += f"<li><a href='{uutinen.link}'>{uutinen.title}</a></li>"
 
